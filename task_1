@@ -1,0 +1,28 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class InputFloat {
+    public static void main(String[] args) {
+        float userInput = getUserFloatInput();
+        System.out.println("Вы ввели: " + userInput);
+    }
+
+    public static float getUserFloatInput() {
+        Scanner scanner = new Scanner(System.in);
+        float userInput = 0;
+        boolean isValidInput = false;
+
+        do {
+            try {
+                System.out.print("Введите дробное число (типа float): ");
+                userInput = scanner.nextFloat();
+                isValidInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Некорректный ввод. Пожалуйста, введите дробное число.");
+                scanner.nextLine(); // Очистить буфер ввода
+            }
+        } while (!isValidInput);
+
+        return userInput;
+    }
+}
