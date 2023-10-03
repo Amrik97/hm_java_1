@@ -1,43 +1,59 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class UserDataInput {
+public class UserDataProcessor {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Введите ФИО: ");
-        String fullName = scanner.nextLine();
+        System.out.print("Введите данные (в произвольном порядке, разделенные пробелом): ");
+        String userInput = scanner.nextLine();
 
-        System.out.print("Введите дату рождения: ");
-        String birthDate = scanner.nextLine();
-
-        System.out.print("Введите номер телефона: ");
-        String phoneNumber = scanner.nextLine();
-
-        System.out.print("Введите пол: ");
-        String gender = scanner.nextLine();
-
-        // Разбиваем ФИО на фамилию, имя и отчество
-        String[] nameParts = fullName.split(" ");
-        String lastName = "";
-        String firstName = "";
-        String middleName = "";
-
-        if (nameParts.length >= 1) {
-            lastName = nameParts[0];
-        }
-        if (nameParts.length >= 2) {
-            firstName = nameParts[1];
-        }
-        if (nameParts.length >= 3) {
-            middleName = nameParts[2];
+        String[] userData = userInput.split(" ");
+        
+        // Проверка количества данных
+        if (userData.length != 6) {
+            System.err.println("Неверное количество данных. Введите фамилию, имя, отчество, дату рождения, номер телефона и пол.");
+            return;
         }
 
-        // Выводим полученные данные
-        System.out.println("Фамилия: " + lastName);
-        System.out.println("Имя: " + firstName);
-        System.out.println("Отчество: " + middleName);
-        System.out.println("Дата рождения: " + birthDate);
-        System.out.println("Номер телефона: " + phoneNumber);
-        System.out.println("Пол: " + gender);
+        String lastName = userData[0];
+        String firstName = userData[1];
+        String middleName = userData[2];
+        String birthDate = userData[3];
+        String phoneNumber = userData[4];
+        String gender = userData[5];
+
+        // Проверка форматов данных
+        if (!isValidDate(birthDate) || !isValidPhoneNumber(phoneNumber) || !isValidGender(gender)) {
+            System.err.println("Неверный формат данных.");
+            return;
+        }
+
+        // Создание файла и запись данных
+        try (FileWriter fileWriter = new FileWriter(lastName + ".txt")) {
+            String userDataLine = lastName + firstName + middleName + birthDate + " " + phoneNumber + gender;
+            fileWriter.write(userDataLine);
+            System.out.println("Данные успешно записаны в файл.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Проверка формата даты
+    private static boolean isValidDate(String date) {
+        // Реализуйте проверку формата даты, например, с использованием регулярных выражений.
+        return true; // Замените на реальную проверку
+    }
+
+    // Проверка формата номера телефона
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+        // Реализуйте проверку формата номера телефона, например, с использованием регулярных выражений.
+        return true; // Замените на реальную проверку
+    }
+
+    // Проверка формата пола
+    private static boolean isValidGender(String gender) {
+        return gender.equals("f") || gender.equals("m");
     }
 }
